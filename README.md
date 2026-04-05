@@ -44,4 +44,4 @@ Aplicación web para el ingreso y gestión de fichas médicas. Permite registrar
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/TU_USUARIO/ficha-medica.git
+   git clone https://github.com/0Mac0/Ficha-Medica.git
