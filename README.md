@@ -138,25 +138,36 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
 
 ```html
 <!DOCTYPE html>
+<!-- Declaración del tipo de documento (HTML5) -->
 <html lang="es">
+<!-- Inicio del documento HTML, idioma español -->
 <head>
+  <!-- Cabecera: metadatos, título y estilos -->
   <meta charset="UTF-8" />
+  <!-- Define la codificación de caracteres UTF-8 para soportar tildes y eñes -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <!-- Hace que la página sea responsive y permita zoom en móviles -->
   <title>Ficha médica | Registro clínico extendido</title>
+  <!-- Título que aparece en la pestaña del navegador -->
   <style>
+    /* ========== ESTILOS CSS ========== */
+    /* Selector universal: resetea márgenes, paddings y box-sizing */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    /* Estilos para el cuerpo de la página */
     body {
-      background: #ffffff;
+      background: #ffffff;               /* Fondo blanco */
       font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      color: #0f172a;
-      line-height: 1.4;
+      /* Fuente moderna y legible */
+      color: #0f172a;                    /* Color de texto principal */
+      line-height: 1.4;                 /* Altura de línea para mejor lectura */
     }
 
+    /* Variables CSS (custom properties) para colores y sombras reutilizables */
     :root {
       --bg: #ffffff;
       --text: #1f2937;
@@ -174,44 +185,51 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
       --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.02), 0 2px 6px rgba(0, 0, 0, 0.05);
     }
 
+    /* Contenedor principal: ancho máximo extendido para aprovechar pantallas grandes */
     .wrap {
-      max-width: 2200px;
-      margin: 0 auto;
-      padding: 24px 36px 32px 36px;
+      max-width: 2200px;                /* Muy ancho para que los campos extendidos se vean bien */
+      margin: 0 auto;                  /* Centrado horizontal */
+      padding: 24px 36px 32px 36px;    /* Espaciado interior superior, derecho, inferior, izquierdo */
     }
 
+    /* Distribución de dos columnas (formulario a la izquierda, panel derecho con tabla) */
     .two-columns {
-      display: grid;
-      grid-template-columns: 1.4fr 1.6fr;
-      gap: 44px;
-      align-items: start;
+      display: grid;                   /* Usamos CSS Grid */
+      grid-template-columns: 1.4fr 1.6fr; /* Columna izquierda más pequeña, derecha más grande */
+      gap: 44px;                      /* Separación entre columnas */
+      align-items: start;             /* Alineación superior */
     }
 
+    /* Rejilla interna del formulario: dos columnas para la mayoría de campos */
     .grid-2col {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 28px 36px;
+      grid-template-columns: repeat(2, 1fr); /* Dos columnas iguales */
+      gap: 28px 36px;                 /* Gap vertical y horizontal */
     }
 
+    /* Clase para que un campo ocupe toda la fila (se usa en RUT, Apellidos, Dirección, etc.) */
     .full-width {
-      grid-column: span 2;
+      grid-column: span 2;            /* Ocupa las dos columnas de la grilla */
     }
 
+    /* Contenedor de la tabla con scroll horizontal si es necesario */
     .table-wrapper {
-      overflow-x: auto;
+      overflow-x: auto;               /* Permite desplazamiento horizontal en tablas anchas */
       border-radius: 20px;
       border: 1px solid #eef2ff;
       background: white;
       width: 100%;
     }
 
+    /* Estilos de la tabla: ancho mínimo grande para que quepan todas las columnas */
     table {
       width: 100%;
-      min-width: 1550px;
-      border-collapse: collapse;
+      min-width: 1550px;              /* Asegura que columnas como Estado civil se vean sin comprimir */
+      border-collapse: collapse;      /* Bordes unidos */
       font-size: 0.85rem;
     }
 
+    /* Inputs, selects y textareas: ancho completo, bordes redondeados, padding cómodo */
     input, select, textarea {
       width: 100%;
       border: 1px solid #cbd5e1;
@@ -225,18 +243,20 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
       color: #0f172a;
     }
 
+    /* Celdas de la tabla: padding y manejo de texto largo */
     td, th {
       padding: 12px 14px;
       border-bottom: 1px solid #eef2ff;
-      white-space: nowrap;
+      white-space: nowrap;            /* Evita saltos de línea en celdas normales */
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 280px;
     }
 
+    /* Responsive: cuando la pantalla es menor a 1400px, las columnas se apilan */
     @media (max-width: 1400px) {
       .two-columns {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr;   /* Una sola columna */
         gap: 40px;
       }
       .wrap {
@@ -247,13 +267,14 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
       }
     }
 
+    /* Responsive para móviles (menos de 640px) */
     @media (max-width: 640px) {
       .grid-2col {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr;   /* Campos uno debajo del otro */
         gap: 20px;
       }
       .full-width {
-        grid-column: span 1;
+        grid-column: span 1;          /* En móvil ya no ocupa dos columnas */
       }
       .stats-row {
         flex-direction: column;
@@ -275,6 +296,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
       }
     }
 
+    /* ===== ESTILOS DE COMPONENTES (encabezados, badges, botones, etc.) ===== */
     .page-header {
       margin-bottom: 28px;
       border-bottom: 4px solid var(--line-strong);
@@ -510,6 +532,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
       background-color: #f9fbfe;
     }
 
+    /* Botones de editar y eliminar dentro de la tabla */
     .editBtn, .deleteBtn {
       border-radius: 32px;
       padding: 6px 10px;
@@ -548,12 +571,14 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
       transform: scale(1.02);
     }
 
+    /* Fila vacía cuando no hay registros */
     .empty-row td {
       text-align: center;
       color: #6c757d;
       padding: 32px;
     }
 
+    /* Toast de notificaciones flotante */
     .toast {
       position: fixed;
       bottom: 24px;
@@ -577,10 +602,12 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
       transform: translateY(0);
     }
 
+    /* Clase para ocultar elementos */
     .hidden {
       display: none !important;
     }
 
+    /* Pantalla de cierre de la aplicación */
     .close-view {
       min-height: 100vh;
       display: grid;
@@ -600,8 +627,10 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
   </style>
 </head>
 <body>
+  <!-- Contenedor principal de la aplicación (visible normalmente) -->
   <div id="appShell">
     <div class="wrap">
+      <!-- Encabezado con título y badges -->
       <div class="page-header">
         <h1>🟢 Formulario de ingreso · Ficha médica</h1>
         <p class="subtitle">Registro clínico</p>
@@ -616,66 +645,70 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         </div>
       </div>
 
+      <!-- Dos columnas: izquierda = formulario, derecha = panel de resumen y tabla -->
       <div class="two-columns">
+        <!-- Panel del formulario -->
         <div class="form-panel">
           <form id="medForm" novalidate>
+            <!-- Sección Datos del paciente -->
             <div class="section">
               <h2>🩺 Datos del paciente</h2>
               <div class="grid-2col">
+                <!-- RUT: campo extendido a todo el ancho -->
                 <div class="field full-width">
                   <label for="rut">RUT *</label>
                   <input id="rut" name="rut" type="text" placeholder="12.345.678-9" autocomplete="off" maxlength="12" />
                   <div class="help" data-error-for="rut"></div>
                 </div>
-
+                <!-- Nombres: ocupa la primera columna -->
                 <div class="field">
                   <label for="nombres">Nombres *</label>
                   <input id="nombres" type="text" placeholder="JUAN CARLOS" />
                   <div class="help" data-error-for="nombres"></div>
                 </div>
-
+                <!-- Celda vacía para mantener la grilla de dos columnas -->
                 <div class="field"></div>
-
+                <!-- Apellidos: extendido -->
                 <div class="field full-width">
                   <label for="apellidos">Apellidos *</label>
                   <input id="apellidos" type="text" placeholder="PÉREZ GONZÁLEZ" />
                   <div class="help" data-error-for="apellidos"></div>
                 </div>
-
+                <!-- Dirección: extendida -->
                 <div class="field full-width">
                   <label for="direccion">Dirección *</label>
                   <input id="direccion" type="text" placeholder="AV. LOS CÓNDORES 123" />
                   <div class="help" data-error-for="direccion"></div>
                 </div>
-
+                <!-- Ciudad: primera columna -->
                 <div class="field">
                   <label for="ciudad">Ciudad *</label>
                   <input id="ciudad" type="text" placeholder="SANTIAGO" />
                   <div class="help" data-error-for="ciudad"></div>
                 </div>
-
+                <!-- Celda vacía -->
                 <div class="field"></div>
-
+                <!-- Teléfono: extendido -->
                 <div class="field full-width">
                   <label for="telefono">Teléfono *</label>
                   <input id="telefono" type="tel" placeholder="912345678" maxlength="9" />
                   <div class="help" data-error-for="telefono"></div>
                 </div>
-
+                <!-- Email: extendido -->
                 <div class="field full-width">
                   <label for="email">Email *</label>
                   <input id="email" type="email" placeholder="CORREO@EJEMPLO.CL" />
                   <div class="help" data-error-for="email"></div>
                 </div>
-
+                <!-- Fecha nacimiento: primera columna -->
                 <div class="field">
                   <label for="fechaNacimiento">Fecha nacimiento *</label>
                   <input id="fechaNacimiento" type="date" />
                   <div class="help" data-error-for="fechaNacimiento"></div>
                 </div>
-
+                <!-- Celda vacía -->
                 <div class="field"></div>
-
+                <!-- Estado civil: extendido -->
                 <div class="field full-width">
                   <label for="estadoCivil">Estado civil *</label>
                   <select id="estadoCivil">
@@ -686,7 +719,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
                   </select>
                   <div class="help" data-error-for="estadoCivil"></div>
                 </div>
-
+                <!-- Comentarios clínicos: extendido -->
                 <div class="field full-width">
                   <label for="comentarios">Comentarios clínicos</label>
                   <textarea id="comentarios" rows="3" placeholder="ALERGIAS, PATOLOGÍAS PREVIAS, OBSERVACIONES..."></textarea>
@@ -694,7 +727,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
                 </div>
               </div>
             </div>
-
+            <!-- Sección de acciones (botones) -->
             <div class="section">
               <h2>⚙️ Acciones</h2>
               <div class="actions">
@@ -707,7 +740,9 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
           </form>
         </div>
 
+        <!-- Panel derecho: estadísticas, búsqueda y tabla -->
         <div class="summary-panel">
+          <!-- Estadísticas simples -->
           <div class="stats-simple">
             <div class="stats-row">
               <div class="stat-item">
@@ -727,6 +762,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
 
           <hr class="separator" />
 
+          <!-- Búsqueda por apellido -->
           <div class="search-box">
             <h2>🔎 Búsqueda por apellido</h2>
             <label for="apellidoBuscar">Apellido (parcial o completo)</label>
@@ -742,6 +778,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
 
           <hr class="separator" />
 
+          <!-- Tabla de registros clínicos -->
           <div class="records-section">
             <h2>📋 Registros clínicos · Estado civil incorporado</h2>
             <div class="table-wrapper">
@@ -773,8 +810,10 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
     </div>
   </div>
 
+  <!-- Toast para notificaciones -->
   <div id="toast" class="toast"></div>
 
+  <!-- Pantalla que se muestra al cerrar la aplicación -->
   <div id="closeView" class="close-view hidden">
     <div class="close-card">
       <h2>🚪 Aplicación cerrada</h2>
@@ -783,9 +822,13 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
     </div>
   </div>
 
+  <!-- ========== JAVASCRIPT ========== -->
   <script>
+    // Función autoejecutable para evitar contaminar el ámbito global
     (function(){
+      // Clave para guardar los datos en localStorage
       const STORAGE_KEY = 'fichas_medicas_v2';
+      // Referencias a elementos del DOM
       const form = document.getElementById('medForm');
       const toastEl = document.getElementById('toast');
       const recordsBody = document.getElementById('recordsBody');
@@ -796,6 +839,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
       const appShell = document.getElementById('appShell');
       const closeViewDiv = document.getElementById('closeView');
 
+      // Campos específicos
       const rutInput = document.getElementById('rut');
       const emailInput = document.getElementById('email');
       const telefonoInput = document.getElementById('telefono');
@@ -807,24 +851,28 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
       const btnCancelarEdicion = document.getElementById('btnCancelarEdicion');
       const btnCerrar = document.getElementById('btnCerrar');
 
+      // Expresión regular para validar email
       const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-      let editingRecordId = null;
+      let editingRecordId = null;   // Almacena el ID del registro que se está editando (null si no se edita)
 
-      const normalizeText = (v) => (v || '').toString().trim().replace(/\s+/g, ' ');
-      const normalizeRUT = (v) => normalizeText(v).replace(/[^0-9kK]/g, '').toUpperCase();
-      const normalizePhone = (v) => normalizeText(v).replace(/[^0-9]/g, '');
-      const toUpperText = (v) => normalizeText(v).toUpperCase();
+      // Funciones de normalización de texto
+      const normalizeText = (v) => (v || '').toString().trim().replace(/\s+/g, ' ');   // Elimina espacios extra
+      const normalizeRUT = (v) => normalizeText(v).replace(/[^0-9kK]/g, '').toUpperCase(); // Solo números y K
+      const normalizePhone = (v) => normalizeText(v).replace(/[^0-9]/g, '');            // Solo dígitos
+      const toUpperText = (v) => normalizeText(v).toUpperCase();                        // Convertir a mayúsculas
 
+      // Formatea un RUT agregando puntos y guión
       function formatRUT(value) {
         const clean = normalizeRUT(value);
         if (!clean) return '';
         if (clean.length === 1) return clean;
         const body = clean.slice(0, -1);
         const dv = clean.slice(-1);
-        const formattedBody = body.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        const formattedBody = body.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Agrega puntos cada 3 dígitos
         return `${formattedBody}-${dv}`;
       }
 
+      // Convierte una fecha ISO a formato DD/MM/AAAA HH:MM:SS
       function formatearFechaHora(isoString) {
         if (!isoString) return '—';
         try {
@@ -842,6 +890,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         }
       }
 
+      // Calcula la edad a partir de la fecha de nacimiento (considera UTC)
       function calcularEdad(fechaNacimientoStr) {
         if (!fechaNacimientoStr) return '—';
         const nacimiento = new Date(fechaNacimientoStr + 'T00:00:00Z');
@@ -857,8 +906,9 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         return edad >= 0 ? edad : 0;
       }
 
-      function loadRecords() {
-        try {
+      // Carga los registros desde localStorage, asegurando que cada uno tenga id y fechaRegistro
+      function loadRecords() { 
+        try { 
           let records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
           records = records.map(rec => {
             if (!rec.id) rec.id = Date.now() + '-' + Math.random().toString(36).substr(2, 6);
@@ -866,14 +916,16 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
             return rec;
           });
           return records;
-        } catch(e) { return []; }
+        } catch(e) { return []; } 
       }
 
-      function saveRecords(records) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-        refreshStatsAndRender();
+      // Guarda los registros en localStorage y actualiza la interfaz
+      function saveRecords(records) { 
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(records)); 
+        refreshStatsAndRender(); 
       }
 
+      // Muestra un mensaje temporal (toast)
       function showToast(msg, duration=2200) {
         toastEl.textContent = msg;
         toastEl.classList.add('show');
@@ -881,17 +933,21 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         window._toastTimer = setTimeout(() => toastEl.classList.remove('show'), duration);
       }
 
+      // Actualiza el texto de estado en la parte superior
       function setStatus(msg) { lastActionSpan.textContent = msg; }
 
+      // Limpia todos los mensajes de error del formulario
       function clearErrors() {
         document.querySelectorAll('.help').forEach(el => { el.textContent = ''; el.classList.remove('error','ok'); });
       }
 
+      // Muestra un error específico para un campo
       function setError(field, msg) {
         const el = document.querySelector(`[data-error-for="${field}"]`);
         if (el) { el.textContent = msg; el.classList.add('error'); }
       }
 
+      // Validación del RUT usando algoritmo de módulo 11
       function validateRUT(rutStr) {
         const raw = (rutStr || '').toString().trim().toUpperCase();
         if (!raw) return 'El RUT es obligatorio.';
@@ -914,6 +970,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
       function validateEmail(email) { return (!email || !EMAIL_REGEX.test(email)) ? 'Email válido requerido.' : ''; }
       function validatePhone(phone) { const ph = normalizePhone(phone); return (!ph || !/^\d{8,9}$/.test(ph)) ? 'Teléfono debe tener 8 o 9 dígitos.' : ''; }
 
+      // Obtiene todos los datos del formulario en un objeto
       function getFormData() {
         return {
           rut: formatRUT(rutInput.value),
@@ -929,6 +986,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         };
       }
 
+      // Valida todos los campos del formulario y muestra errores
       function validateFull(data) {
         clearErrors();
         let errors = {};
@@ -950,6 +1008,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         return errors;
       }
 
+      // Carga los datos de un registro en el formulario (para edición o autocompletado)
       function setFormData(record) {
         rutInput.value = formatRUT(record.rut || '');
         document.getElementById('nombres').value = record.nombres || '';
@@ -963,24 +1022,27 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         document.getElementById('comentarios').value = record.comentarios || '';
       }
 
-      function clearForm() {
-        form.reset();
-        clearErrors();
-        cancelEditMode(false);
-        setStatus('Formulario limpio');
-        showToast('Campos limpiados');
+      // Limpia el formulario y sale del modo edición si estaba activo
+      function clearForm() { 
+        form.reset(); 
+        clearErrors(); 
+        cancelEditMode(false); 
+        setStatus('Formulario limpio'); 
+        showToast('Campos limpiados'); 
       }
 
+      // Cancela el modo edición
       function cancelEditMode(showMsg=true) {
         editingRecordId = null;
         btnGuardar.textContent = 'Guardar';
         btnCancelarEdicion.classList.add('hidden');
-        if(showMsg) {
-          setStatus('Edición cancelada');
-          showToast('Modo edición desactivado');
+        if(showMsg) { 
+          setStatus('Edición cancelada'); 
+          showToast('Modo edición desactivado'); 
         }
       }
 
+      // Función auxiliar para cancelar edición y limpiar formulario
       function cancelAndClearForm() {
         if (editingRecordId) {
           cancelEditMode(true);
@@ -990,8 +1052,9 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         }
       }
 
+      // Autocompletado automático al perder el foco del RUT: busca si existe y carga los datos
       function autoCompletarPorRUT() {
-        if (editingRecordId) return;
+        if (editingRecordId) return;   // No autocompletar si estamos editando
         const rutIngresado = rutInput.value.trim();
         if (!rutIngresado) return;
         const rutNorm = normalizeRUT(rutIngresado);
@@ -1005,6 +1068,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         }
       }
 
+      // Actualiza las estadísticas y vuelve a renderizar la tabla según la búsqueda actual
       function refreshStatsAndRender() {
         const records = loadRecords();
         totalSpan.textContent = records.length;
@@ -1023,13 +1087,17 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         setStatus(editingRecordId ? 'Modo edición activo' : 'Sincronizado');
       }
 
+      // Normaliza una cadena para búsqueda (minúsculas, sin caracteres especiales)
       function normalizeSearch(val) { return (val || '').toString().toLocaleLowerCase('es-CL'); }
+
+      // Escapa caracteres HTML para evitar inyección
       function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
 
+      // Renderiza la tabla con los registros proporcionados
       function renderTable(recordsArray) {
-        if(!recordsArray.length) {
-          recordsBody.innerHTML = '<tr class="empty-row"><td colspan="12">📭 No hay registros aún. Complete el formulario.</td></tr>';
-          return;
+        if(!recordsArray.length) { 
+          recordsBody.innerHTML = '<tr class="empty-row"><td colspan="12">📭 No hay registros aún. Complete el formulario.</td></tr>'; 
+          return; 
         }
         const html = recordsArray.map(rec => {
           const edad = calcularEdad(rec.fechaNacimiento);
@@ -1060,16 +1128,17 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         recordsBody.innerHTML = html;
       }
 
+      // Ejecuta la búsqueda por apellido
       function searchBySurname() {
         const query = apellidoBuscar.value.trim();
         const records = loadRecords();
-        if(!query) {
-          renderTable(records);
-          searchHitsSpan.textContent = '0';
-          searchInfoDiv.innerHTML = '💡 La búsqueda es insensible a mayúsculas/minúsculas y detecta coincidencias parciales.';
-          setStatus('Mostrando todos');
-          showToast('Listado completo');
-          return;
+        if(!query) { 
+          renderTable(records); 
+          searchHitsSpan.textContent = '0'; 
+          searchInfoDiv.innerHTML = '💡 La búsqueda es insensible a mayúsculas/minúsculas y detecta coincidencias parciales.'; 
+          setStatus('Mostrando todos'); 
+          showToast('Listado completo'); 
+          return; 
         }
         const filtered = records.filter(r => normalizeSearch(r.apellidos).includes(normalizeSearch(query)));
         searchHitsSpan.textContent = filtered.length;
@@ -1079,6 +1148,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         searchInfoDiv.innerHTML = `🔍 <strong>${filtered.length} resultado(s)</strong> para "${escapeHtml(query)}"`;
       }
 
+      // Elimina un registro tras confirmación
       function deleteRecord(recordId) {
         let records = loadRecords();
         const idx = records.findIndex(r => r.id === recordId);
@@ -1096,6 +1166,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         }
       }
 
+      // Activa el modo edición cargando los datos del registro en el formulario
       function enterEditMode(record) {
         editingRecordId = record.id;
         setFormData(record);
@@ -1105,28 +1176,22 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         showToast('Modo edición - modifica y guarda');
       }
 
+      // Evento submit del formulario: guardar o actualizar
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const data = getFormData();
         const errors = validateFull(data);
-        if(Object.keys(errors).length) {
-          setStatus('Corrige errores en el formulario');
-          showToast('Campos inválidos');
-          return;
-        }
-
+        if(Object.keys(errors).length) { setStatus('Corrige errores en el formulario'); showToast('Campos inválidos'); return; }
+        
         let records = loadRecords();
         const currentRutNorm = normalizeRUT(data.rut);
-
+        
+        // Si estamos en modo edición
         if(editingRecordId) {
           const editIndex = records.findIndex(r => r.id === editingRecordId);
-          if(editIndex === -1) {
-            showToast('Registro original no existe');
-            cancelEditMode(false);
-            return;
-          }
+          if(editIndex === -1) { showToast('Registro original no existe'); cancelEditMode(false); return; }
           data.id = editingRecordId;
-          data.fechaRegistro = new Date().toISOString();
+          data.fechaRegistro = new Date().toISOString();  // Actualiza la fecha/hora
           records[editIndex] = data;
           saveRecords(records);
           setStatus('Registro actualizado');
@@ -1137,7 +1202,8 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
           refreshStatsAndRender();
           return;
         }
-
+        
+        // Verificar si ya existe un registro con el mismo RUT
         const existingWithSameRut = records.filter(r => normalizeRUT(r.rut) === currentRutNorm);
         if(existingWithSameRut.length > 0) {
           let msg = `Ya existe ${existingWithSameRut.length} registro(s) con el RUT ${data.rut}. ¿Qué deseas hacer?\n\n`;
@@ -1145,6 +1211,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
           msg += `2. "Nuevo" -> Crear un nuevo registro con el mismo RUT (duplicado).`;
           const opcion = confirm(msg + "\n\nAceptar = Sobrescribir / Cancelar = Crear nuevo");
           if(opcion) {
+            // Sobrescribir: mostrar lista de registros con ese RUT para elegir
             let opciones = existingWithSameRut.map((r, idx) => `${idx+1}. ${r.nombres} ${r.apellidos} (Registro del ${formatearFechaHora(r.fechaRegistro)})`).join('\n');
             let seleccion = prompt(`Selecciona el registro a sobrescribir:\n${opciones}\n\nIngresa el número (1-${existingWithSameRut.length}):`);
             let idxSeleccionado = parseInt(seleccion) - 1;
@@ -1164,6 +1231,7 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
             refreshStatsAndRender();
             return;
           } else {
+            // Crear nuevo duplicado
             data.id = Date.now() + '-' + Math.random().toString(36).substr(2, 6);
             data.fechaRegistro = new Date().toISOString();
             records.push(data);
@@ -1176,7 +1244,8 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
             return;
           }
         }
-
+        
+        // Si no hay duplicado, simplemente agregar
         data.id = Date.now() + '-' + Math.random().toString(36).substr(2, 6);
         data.fechaRegistro = new Date().toISOString();
         records.push(data);
@@ -1188,71 +1257,75 @@ La aplicación fue desarrollada en un solo archivo HTML que integra la estructur
         refreshStatsAndRender();
       });
 
+      // Asignación de eventos a los botones
       btnLimpiar.addEventListener('click', clearForm);
-      btnCerrar.addEventListener('click', () => {
-        try { window.close(); } catch(e){}
-        appShell.classList.add('hidden');
-        closeViewDiv.classList.remove('hidden');
-        setStatus('App cerrada');
+      btnCerrar.addEventListener('click', () => { 
+        try { window.close(); } catch(e){} 
+        appShell.classList.add('hidden'); 
+        closeViewDiv.classList.remove('hidden'); 
+        setStatus('App cerrada'); 
       });
       btnBuscar.addEventListener('click', searchBySurname);
-      btnVerTodos.addEventListener('click', () => {
-        apellidoBuscar.value = '';
-        refreshStatsAndRender();
-        setStatus('Mostrando todos los registros');
-        showToast('Listado completo');
+      btnVerTodos.addEventListener('click', () => { 
+        apellidoBuscar.value = ''; 
+        refreshStatsAndRender(); 
+        setStatus('Mostrando todos los registros'); 
+        showToast('Listado completo'); 
       });
       btnCancelarEdicion.addEventListener('click', cancelAndClearForm);
       rutInput.addEventListener('blur', autoCompletarPorRUT);
 
+      // Delegación de eventos para botones de editar/eliminar dentro de la tabla
       recordsBody.addEventListener('click', (e) => {
         const edit = e.target.closest('.editBtn');
-        if(edit) {
-          const id = edit.dataset.id;
-          const rec = loadRecords().find(r => r.id === id);
-          if(rec) enterEditMode(rec);
-          return;
+        if(edit) { 
+          const id = edit.dataset.id; 
+          const rec = loadRecords().find(r => r.id === id); 
+          if(rec) enterEditMode(rec); 
+          return; 
         }
         const del = e.target.closest('.deleteBtn');
         if(del) deleteRecord(del.dataset.id);
       });
 
+      // Convertir automáticamente a mayúsculas en ciertos campos mientras se escribe
       const upperFields = ['nombres','apellidos','direccion','ciudad','email','estadoCivil','comentarios'];
       upperFields.forEach(id => {
         const el = document.getElementById(id);
-        if(el) el.addEventListener('input', function() {
-          const s=this.selectionStart, e=this.selectionEnd;
-          this.value=this.value.toUpperCase();
-          if(s!==null) this.setSelectionRange(s,e);
+        if(el) el.addEventListener('input', function() { 
+          const s=this.selectionStart, e=this.selectionEnd; 
+          this.value=this.value.toUpperCase(); 
+          if(s!==null) this.setSelectionRange(s,e); 
         });
       });
-
+      // Teléfono: solo números, máximo 9 dígitos
       telefonoInput.addEventListener('input', (e) => { e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0,9); });
-
-      rutInput.addEventListener('input', (e) => {
-        const cur = e.target.value;
-        const form = formatRUT(cur);
-        const atEnd = e.target.selectionStart === cur.length;
-        e.target.value = form;
-        if(atEnd) e.target.setSelectionRange(form.length, form.length);
+      // Formateo automático del RUT mientras se escribe
+      rutInput.addEventListener('input', (e) => { 
+        const cur = e.target.value; 
+        const form = formatRUT(cur); 
+        const atEnd = e.target.selectionStart === cur.length; 
+        e.target.value = form; 
+        if(atEnd) e.target.setSelectionRange(form.length, form.length); 
+      });
+      // Validación al salir del campo RUT: si es inválido, limpiar
+      rutInput.addEventListener('blur', () => { 
+        if(rutInput.value && validateRUT(rutInput.value)) { 
+          setError('rut','RUT inválido, campo limpiado'); 
+          rutInput.value=''; 
+        } else if(rutInput.value) rutInput.value = formatRUT(rutInput.value); 
+      });
+      // Validación de email al perder el foco
+      emailInput.addEventListener('blur', () => { 
+        const val = emailInput.value.trim().toUpperCase(); 
+        if(val && !EMAIL_REGEX.test(val)) { 
+          emailInput.value=''; 
+          setError('email','Email inválido'); 
+          showToast('Email inválido, limpiado'); 
+        } else emailInput.value=val; 
       });
 
-      rutInput.addEventListener('blur', () => {
-        if(rutInput.value && validateRUT(rutInput.value)) {
-          setError('rut','RUT inválido, campo limpiado');
-          rutInput.value='';
-        } else if(rutInput.value) rutInput.value = formatRUT(rutInput.value);
-      });
-
-      emailInput.addEventListener('blur', () => {
-        const val = emailInput.value.trim().toUpperCase();
-        if(val && !EMAIL_REGEX.test(val)) {
-          emailInput.value='';
-          setError('email','Email inválido');
-          showToast('Email inválido, limpiado');
-        } else emailInput.value=val;
-      });
-
+      // Inicialización: cargar registros y mostrar estado
       refreshStatsAndRender();
       setStatus('Listo para registrar informacion paciente');
     })();
